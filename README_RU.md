@@ -6,6 +6,12 @@
 
 ---
 
+<div style="text-align: center;">
+  <img src="./images/chart_example.png" alt="Example">
+</div>
+
+---
+
 ## Возможности
 
 - Native Filter (панель фильтров дашборда), не график
