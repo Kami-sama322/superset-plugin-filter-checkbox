@@ -1,4 +1,9 @@
 # Checkbox — Native Filter для Apache Superset
+---
+
+### 🇷🇺 Русский | [🇬🇧 English](README.md)
+
+---
 
 > **Кастомный Native Filter плагин для Apache Superset**: прокручиваемый
 > **список чекбоксов** для фильтрации дашборда по значениям колонки
@@ -273,7 +278,7 @@ docker compose up -d
 ```
 superset-plugin-filter-checkbox/
 ├── README.md
-├── README_RU.md
+├── README.ru.md
 ├── src/
 │   ├── index.ts
 │   ├── CheckboxFilterPlugin.tsx

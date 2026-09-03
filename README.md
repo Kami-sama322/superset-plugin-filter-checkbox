@@ -1,4 +1,9 @@
 # Checkbox — Native Filter for Apache Superset
+---
+
+### [🇷🇺 Русский](README.ru.md) | 🇬🇧 English
+
+---
 
 > **A custom Apache Superset Native Filter plugin** that shows a scrollable
 > **checkbox list** for filtering dashboards by column values
@@ -271,7 +276,7 @@ Dataset columns: `macroregion`, `region` (many regions per macroregion).
 ```
 superset-plugin-filter-checkbox/
 ├── README.md
-├── README_RU.md
+├── README.ru.md
 ├── src/
 │   ├── index.ts
 │   ├── CheckboxFilterPlugin.tsx
