@@ -1,0 +1,139 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import { t } from '@apache-superset/core/translation';
+import { validateNonEmpty } from '@superset-ui/core';
+import {
+  ControlPanelConfig,
+  sharedControls,
+} from '@superset-ui/chart-controls';
+import { DEFAULT_FORM_DATA } from './types';
+
+const {
+  enableEmptyFilter,
+  inverseSelection,
+  multiSelect,
+  enableSearch,
+  sortAscending,
+} = DEFAULT_FORM_DATA;
+
+const config: ControlPanelConfig = {
+  controlPanelSections: [
+    {
+      label: t('Query'),
+      expanded: true,
+      controlSetRows: [
+        [
+          {
+            name: 'groupby',
+            config: {
+              ...sharedControls.groupby,
+              label: t('Column'),
+              required: true,
+            },
+          },
+        ],
+      ],
+    },
+    {
+      label: t('UI Configuration'),
+      expanded: true,
+      controlSetRows: [
+        [
+          {
+            name: 'sortAscending',
+            config: {
+              type: 'CheckboxControl',
+              renderTrigger: true,
+              label: t('Sort ascending'),
+              default: sortAscending,
+              description: t('Sort checkbox values in ascending order'),
+            },
+          },
+        ],
+        [
+          {
+            name: 'multiSelect',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Can select multiple values'),
+              default: multiSelect,
+              resetConfig: true,
+              affectsDataMask: true,
+              renderTrigger: true,
+              description: t(
+                'Uncheck to allow selecting only one value at a time',
+              ),
+            },
+          },
+        ],
+        [
+          {
+            name: 'enableSearch',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Show search bar'),
+              default: enableSearch,
+              renderTrigger: true,
+              description: t(
+                'Show a search input above the checkbox list to filter values',
+              ),
+            },
+          },
+        ],
+        [
+          {
+            name: 'enableEmptyFilter',
+            config: {
+              type: 'CheckboxControl',
+              label: t('Filter value is required'),
+              default: enableEmptyFilter,
+              renderTrigger: true,
+              description: t(
+                'User must select a value before applying the filter',
+              ),
+            },
+          },
+        ],
+        [
+          {
+            name: 'inverseSelection',
+            config: {
+              type: 'CheckboxControl',
+              renderTrigger: true,
+              affectsDataMask: true,
+              label: t('Inverse selection'),
+              default: inverseSelection,
+              description: t(
+                'Exclude selected values. Checked items show a cross instead of a tick.',
+              ),
+            },
+          },
+        ],
+      ],
+    },
+  ],
+  controlOverrides: {
+    groupby: {
+      multi: false,
+      validators: [validateNonEmpty],
+    },
+  },
+};
+
+export default config;

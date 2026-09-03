@@ -1,0 +1,31 @@
+services:
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: superset_with_checkbox_filter:6.1.0
+    ports:
+      - "8088:8088"
+    environment:
+      - SUPERSET_SECRET_KEY=your_secure_random_string_here
+    volumes:
+      - superset_home:/app
+    user: "root"
+    command: >
+      sh -c "
+      if [ ! -f /app/superset.db ]; then
+        echo '=== First run: DB init + admin ===' &&
+        superset db upgrade &&
+        superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password admin &&
+        superset init &&
+        echo '=== Loading examples ===' &&
+        superset load-examples;
+      else
+        echo '=== DB exists, skip init ===';
+      fi &&
+      echo '=== Starting Apache Superset ===' &&
+      exec superset run -p 8088 -h 0.0.0.0 --with-threads
+      "
+
+volumes:
+  superset_home:
