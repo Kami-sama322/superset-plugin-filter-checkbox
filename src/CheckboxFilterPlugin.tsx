@@ -29,7 +29,6 @@ import { styled } from '@apache-superset/core/theme';
 import { FormItem, Input } from '@superset-ui/core/components';
 import { FilterPluginStyle, StatusMessage } from './common';
 import { PluginFilterCheckboxProps, SelectValue } from './types';
-import { useCrossFilterSync } from './useCrossFilterSync';
 import {
   filterBySearch,
   filterDisplayValues,
@@ -182,48 +181,34 @@ export default function PluginFilterCheckbox(
     return sortRows(rows, col, sortAscending);
   }, [data, col, sortAscending]);
 
-  const allOptionValues = useMemo(
-    () => allUniqueRows.map(row => row[col]),
-    [allUniqueRows, col],
-  );
-
   const visibleRows = useMemo(() => {
     const limited = filterDisplayValues(allUniqueRows, col, displayValues);
     return filterBySearch(limited, col, enableSearch ? search : '');
   }, [allUniqueRows, col, displayValues, enableSearch, search]);
 
-  const updateDataMask = useCallback(
-    (
-      values: SelectValue,
-      options?: { excludeSelection?: boolean },
-    ) => {
-      const excludeSelection =
-        options?.excludeSelection ?? inverseSelection;
-      const emptyFilter =
-        enableEmptyFilter && !excludeSelection && !values?.length;
-      const suffix =
-        excludeSelection && values?.length ? t(' (excluded)') : '';
+  const updateDataMask = useCallback((values: SelectValue) => {
+    const excludeSelection = inverseSelection;
+    const emptyFilter = enableEmptyFilter && !excludeSelection && !values?.length;
+    const suffix = excludeSelection && values?.length ? t(' (excluded)') : '';
 
-      const nextMask: DataMask = {
-        extraFormData: getSelectExtraFormData(
-          col,
-          values,
-          emptyFilter,
-          excludeSelection,
-        ) as ExtraFormData,
-        filterState: {
-          value: values,
-          label: values?.length
-            ? `${values
-                .map(value => formatDataRecordValue(value))
-                .join(', ')}${suffix}`
-            : undefined,
-        },
-      };
-      setDataMask(nextMask);
-    },
-    [col, enableEmptyFilter, inverseSelection, setDataMask],
-  );
+    const nextMask: DataMask = {
+      extraFormData: getSelectExtraFormData(
+        col,
+        values,
+        emptyFilter,
+        excludeSelection,
+      ) as ExtraFormData,
+      filterState: {
+        value: values,
+        label: values?.length
+          ? `${values
+              .map(value => formatDataRecordValue(value))
+              .join(', ')}${suffix}`
+          : undefined,
+      },
+    };
+    setDataMask(nextMask);
+  }, [col, enableEmptyFilter, inverseSelection, setDataMask]);
 
   const handleToggle = useCallback(
     (rawValue: DataRecordValue) => {
@@ -250,16 +235,6 @@ export default function PluginFilterCheckbox(
     },
     [multiSelect, selectedKeySet, selectedValues, updateDataMask],
   );
-
-  useCrossFilterSync({
-    col,
-    datasource: formData.datasource,
-    multiSelect,
-    inverseSelection,
-    allOptionValues,
-    selectedValues,
-    updateDataMask,
-  });
 
   useEffect(() => {
     if (filterState.value !== undefined) {

@@ -28,10 +28,6 @@
 - Default selected values via the standard native-filter Default value UI
 - Option list does **not** cascade from other filters
 - Filters charts on the same dataset through native filter scope
-- Syncs selection from any **chart cross-filter** on the same dataset:
-  resolves distinct values of the filter column under the chart’s filter
-  clauses (any columns), then selects them
-  (inverse → selects the complement so clicked values stay unmarked)
 
 ---
 
@@ -250,25 +246,6 @@ docker compose up -d
 6. Set filter **scope** to the charts that should react
 7. **Save**
 
-### Cross-filter sync
-
-When a chart on the **same dataset** emits a cross-filter (table cell click,
-map region click, …), the checkbox list updates to the distinct values of
-**this filter’s column** that remain under that chart filter — even if the
-chart filtered a different column.
-
-- Normal mode: matching values are checked (✓)
-- Inverse mode: matching values stay unchecked; all others get ×
-
-### Example
-
-Dataset columns: `macroregion`, `region` (many regions per macroregion).
-
-| Filter column | Chart click | Checkbox result (normal) |
-|---------------|-------------|---------------------------|
-| `region` | table/map on `macroregion` | regions belonging to that macroregion |
-| `region` | table on `region` | that region |
-
 ---
 
 ## Package layout
@@ -280,8 +257,6 @@ superset-plugin-filter-checkbox/
 ├── src/
 │   ├── index.ts
 │   ├── CheckboxFilterPlugin.tsx
-│   ├── useCrossFilterSync.ts   # Redux + resolve chart → filter
-│   ├── crossFilterSync.ts      # collect / fetch / selection helpers
 │   ├── buildQuery.ts
 │   ├── controlPanel.ts
 │   ├── transformProps.ts
